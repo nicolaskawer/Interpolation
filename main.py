@@ -11,6 +11,18 @@ def print_hi(name):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    dictionary = {}
+    helper = {}
+    size = int(input("enter how many point do u have: "))
+    for i in range(size):
+        print(i+1, ':\n')
+        x = input("x = ")
+        y = float(input("y = "))
+        helper = {x: y}
+        dictionary.update(helper)
+    print(dictionary)
+
+
+
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
