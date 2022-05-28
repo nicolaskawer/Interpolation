@@ -8,20 +8,19 @@ def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 
-def linear_interpolation(arr, x_f):
-    for i in range(size):
-        if arr[0][i] > x_f:
+def linear_interpolation(arr, x_f1):
+    for i in range(len(arr[0])):
+        if arr[0][i] > x_f1:
             x_1 = arr[0][i - 1]
             x_2 = arr[0][i]
-            function_x_f = (((arr[1][i-1] - arr[1][i]) * x_f) / (x_1 - x_2)) + ((arr[1][i] * x_1 - arr[1][i-1] * x_2) / (x_1 - x_2))
+            function_x_f = (((arr[1][i-1] - arr[1][i]) * x_f1) / (x_1 - x_2)) + ((arr[1][i] * x_1 - arr[1][i-1] * x_2) / (x_1 - x_2))
             break
     return function_x_f
 
 
 
 
-
-
+"""Matrix calculator methods:"""
 def make_unit_matrix():
     unit_matrix = []
     for i in range(0, size):
@@ -44,9 +43,6 @@ def exchange(row, row_replace):
     unit_matrix = temp_elementary = make_unit_matrix()
     temp_elementary[row], temp_elementary[row_replace] = unit_matrix[row_replace], unit_matrix[row]
     return temp_elementary
-
-
-
 
 def gauss_method(matrix):
     mul = make_unit_matrix()
@@ -99,16 +95,17 @@ def multiply_two_matrix(matrix1, matrix2):
             for k in range(len(matrix2)):
                 result[i][j] += matrix1[i][k] * matrix2[k][j]
     return result
-def Polynomial_interpolation(arr, x_f):
+
+
+def Polynomial_interpolation(arr, x_f1):
     strong_matrix = []
     answer_matrix = arr[1]
-    print(len(arr[0]))
     for i in range(len(arr[0])-1):
         helper = []
         for j in range(len(arr[0])-1):
             helper.append(arr[0][i] ** j)
         strong_matrix.append(helper)
-    print(strong_matrix)
+    #print(strong_matrix)
 
     multiply_elementary_matrix = gauss_method(strong_matrix)
     for i in range(size):
@@ -121,30 +118,30 @@ def Polynomial_interpolation(arr, x_f):
         if i == 0:
             total_amount += final_result[i]
             continue
-        total_amount += final_result[i] * (x_f**i)
+        total_amount += final_result[i] * (x_f1**i)
     return total_amount
 
 
-
-
-
-
-
-def lagrange_interpolation(arr, x_f):
-    total_amount = 0
-    for i in range(size):
-        if arr[0][i] > x_f:
-            stop = arr[0][i-1]
-            break
-    #for i in range(stop):
-        #total_amount += (x_f - )
+def lagrange_interpolation(arr, x_f1):
+    Pn = 0
+    for i in range(len(arr[0])):
+        Li = 1
+        for j in range((len(arr[0]))):
+            if i==j:
+                continue
+            Li *= (x_f1-arr[0][j])/(arr[0][i]-arr[0][j])
+        Pn += Li*arr[1][i]
+    return Pn
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    "לא לשכוח להוסיף הערות לבודק על הטבלת ערכים הזו מתחת"
     two_dimensional_array = tuple([[1, 2, 3, 4], [0.8415, 0.9093, 0.1411, 8]])
-    size = 5
     x_f = 2.5
+    #another example:
+    #two_dimensional_array = tuple([[1, 2, 4], [1, 0, 1.5]])
+    #x_f = 3
     final_result = []
     answer_matrix = []
     result = linear_interpolation(two_dimensional_array, x_f)
@@ -152,7 +149,7 @@ if __name__ == '__main__':
     size = len(two_dimensional_array[0]) - 1
     result = Polynomial_interpolation(two_dimensional_array, x_f)
     print(result)
-
+    print(lagrange_interpolation(two_dimensional_array, x_f))
     """helper = {}
     size = int(input("enter how many point do u have: "))
     for i in range(size):
