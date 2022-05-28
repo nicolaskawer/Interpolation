@@ -61,11 +61,13 @@ def gauss_method(matrix):
         if flag != 0:
             temp_matrix = exchange(r, c_max)
             mul = multiply_two_matrix(temp_matrix, mul)
+            matrix = multiply_two_matrix(temp_matrix, matrix)
     for r in range(size):
         for c in range(r, size):
             if matrix[r][r] == 1 and r != c:
                 temp_matrix = make_elementary_matrix(matrix[r][r], matrix[c][r], c, r)
                 mul = multiply_two_matrix(temp_matrix, mul)
+                matrix = multiply_two_matrix(temp_matrix, matrix)
             else:
                 temp_matrix = make_unit_matrix()
                 if matrix[r][r] < 0:
@@ -73,12 +75,13 @@ def gauss_method(matrix):
                 else:
                     temp_matrix[r][r] = 1 / matrix[r][r]
                 mul = multiply_two_matrix(temp_matrix, mul)
+                matrix = multiply_two_matrix(temp_matrix, matrix)
     for r in range(size-1, -1, -1):
         for c in range(r, -1, -1):
             if r != c:
                 temp_matrix = make_elementary_matrix(matrix[r][r], matrix[c][r], c, r)
                 mul = multiply_two_matrix(temp_matrix, mul)
-
+                matrix = multiply_two_matrix(temp_matrix, matrix)
     return mul
 
 
@@ -98,7 +101,7 @@ def multiply_two_matrix(matrix1, matrix2):
     return result
 def Polynomial_interpolation(arr, x_f):
     strong_matrix = []
-
+    answer_matrix = arr[1]
     print(len(arr[0]))
     for i in range(len(arr[0])-1):
         helper = []
@@ -118,7 +121,7 @@ def Polynomial_interpolation(arr, x_f):
         if i == 0:
             total_amount += final_result[i]
             continue
-        total_amount += final_result[i] *(x_f**i)
+        total_amount += final_result[i] * (x_f**i)
     return total_amount
 
 
@@ -139,7 +142,7 @@ def lagrange_interpolation(arr, x_f):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    two_dimensional_array = tuple([[0, 1, 2, 3, 4], [0, 0.8415, 0.9093, 0.1411, 8]])
+    two_dimensional_array = tuple([[1, 2, 3, 4], [0.8415, 0.9093, 0.1411, 8]])
     size = 5
     x_f = 2.5
     final_result = []
