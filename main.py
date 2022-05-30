@@ -196,17 +196,7 @@ if __name__ == '__main__':
     print(lagrange_interpolation(two_dimensional_array, x_f))
     size = len(two_dimensional_array[0]) - 2
     print(Spline_Kobe(two_dimensional_array, x_f))
-    """helper = {}
-    size = int(input("enter how many point do u have: "))
-    for i in range(size):
-        print(i+1, ':\n')
-        x = input("x = ")
-        y = float(input("y = "))
-        helper = {x: y}
-        dictionary.update(helper)
-    print(dictionary)
-    x_f = float(input("Enter the point u want to calculate: "))
-    print(dictionary[0])"""
+
 
 
 
