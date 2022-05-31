@@ -133,14 +133,18 @@ def lagrange_interpolation(arr, x_f1):
     return Pn
 
 
-def Neville(m, n, pol):
-    if m == len(values_table[0])-2:
-        return 0
-    if n == 0:
-        return 0
-    else:
-        pol += ((x_f-values_table[0][m])*Neville(m+1, n, pol)-(x_f-values_table[0][n])*Neville(m, n-1, pol))/(values_table[0][n]-values_table[0][m])
-
+def neville(arr, x):
+    n = len(arr[0])
+    p = n*[0]
+    for k in range(n):
+        for i in range(n-k):
+            if k == 0:
+                p[i] = arr[1][i]
+            else:
+                p[i] = ((x-arr[0][i+k])*p[i]+ \
+                        (arr[0][i]-x)*p[i+1])/ \
+                        (arr[0][i]-arr[0][i+k])
+    return p[0]
 
 def Spline_Kobe(arr, x_f1):
     hi = []
@@ -198,23 +202,20 @@ def Spline_Kobe(arr, x_f1):
 
 
 if __name__ == '__main__':
-    # values_table = tuple([[0, 0.5235987756, 0.7853981634, 1.570796327], [0, 0.5, 0.7072, 1]])
-    # x_f = 1.047197551
+    values_table = tuple([[0, 0.5235987756, 0.7853981634, 1.570796327], [0, 0.5, 0.7072, 1]])
+    x_f = 1.047197551
     # another example:
-    polynomial = 0
-    values_table = tuple([[1, 2, 4], [1, 0, 1.5]])
-    x_f = 3
+    # values_table = tuple([[0, 1, 2, 3, 4, 5, 6], [0, 0.8415, 0.9093, 0.1411, -0.7568, -0.9589, -0.2794]])
+    # x_f = 2.5
     final_result = []
     answer_matrix = []
     size = len(values_table[0])
-    result = linear_interpolation(values_table, x_f)
-    print(result)
-    result = Polynomial_interpolation(values_table, x_f)
-    print(result)
-    print(lagrange_interpolation(values_table, x_f))
-    print(Neville(0, len(values_table[0])-1, polynomial))
+    print(f'The result in Linear interpolation is: {linear_interpolation(values_table, x_f)}')
+    print(f'The result in Polynomial interpolation is: {Polynomial_interpolation(values_table, x_f)}')
+    print(f'The result in lagrange interpolation is: {lagrange_interpolation(values_table, x_f)}')
+    print(f'The result in Neville method is: {neville(values_table,x_f)}')
     size = len(values_table[0]) - 2
-    print(Spline_Kobe(values_table, x_f))
+    print(f'The result in Spline_Kobe method is: {Spline_Kobe(values_table, x_f)}')
 
 
 
