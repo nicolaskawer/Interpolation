@@ -105,7 +105,6 @@ def Polynomial_interpolation(arr, x_f1):
         for j in range(len(arr[0])):
             helper.append(arr[0][i] ** j)
         strong_matrix.append(helper)
-    #print(strong_matrix)
 
     multiply_elementary_matrix = gauss_method(strong_matrix)
     for i in range(size):
@@ -133,20 +132,35 @@ def lagrange_interpolation(arr, x_f1):
         Pn += Li*arr[1][i]
     return Pn
 
+
+def Neville(m, n, pol):
+    if m == len(values_table[0])-2:
+        return 0
+    if n == 0:
+        return 0
+    else:
+        pol += ((x_f-values_table[0][m])*Neville(m+1, n, pol)-(x_f-values_table[0][n])*Neville(m, n-1, pol))/(values_table[0][n]-values_table[0][m])
+
+
 def Spline_Kobe(arr, x_f1):
     hi = []
     gama = []
     mi = []
     di = []
     new_matrix = []
-    for i in range(len(arr[0])-1):
-        hi.append(arr[0][i+1] - arr[0][i])
+    final_result1 = []
+    s_x = 0
+    for i in range(len(arr[0])):
+        if i == len(arr[0])-1:
+            hi.append(0)
+        else:
+            hi.append(arr[0][i+1] - arr[0][i])
     for i in range(len(hi)):
-        if i == len(hi)-1:
+        if i == len(hi)-1 or i == 0:
             mi.append(0)
             gama.append(0)
         else:
-            gama.append(hi[i+1]/(hi[i]+hi[i+1]))
+            gama.append(hi[i]/(hi[i]+hi[i-1]))
             mi.append(1-gama[i])
     for i in range(1, len(arr[0])-1):
         di.append((6/(hi[i-1]+hi[i]))*(((arr[1][i+1]-arr[1][i])/hi[i])-((arr[1][i]-arr[1][i-1])/hi[i-1])))
@@ -156,46 +170,52 @@ def Spline_Kobe(arr, x_f1):
             if i == j:
                 helper.append(2)
             elif j == i+1:
-                helper.append(gama[i+1])
+                helper.append(gama[j])
             elif j == i-1:
-                helper.append(mi[i])
+                helper.append(mi[i+1])
             else:
                 helper.append(0)
         new_matrix.append(helper)
     multiply_elementary_matrix = gauss_method(new_matrix)
-    for i in range(size):
-        final_result.append(0)
+    for i in range(len(multiply_elementary_matrix)+1):
+        final_result1.append(0)
     for r in range(len(multiply_elementary_matrix)):
         for c in range(len(multiply_elementary_matrix)):
-            final_result[r] += multiply_elementary_matrix[r][c] * di[c]
+            final_result1[r] += multiply_elementary_matrix[r][c] * di[c]
 
+    counter = 0
     for i in range(len(arr[0])):
+        if i > 1:
+            counter += 1
         if arr[0][i] > x_f1:
             x_1 = arr[0][i - 1]
             x_2 = arr[0][i]
-            s_x = (((x_2-x_f1)**3)*mi[i-1]+((x_f1-x_1)**3)*mi[i])/(6*hi[i-1])+(((x_2-x_f1)*arr[1][i-1]+(x_f1-x_1)*arr[1][i])/hi[i-1]) -(((x_2-x_f1)*mi[i-1]+(x_f1-x_1)*mi[i])*hi[i-1])/6
+            s_x = (((x_2-x_f1)**3)*final_result1[counter-1]+((x_f1-x_1)**3)*final_result1[counter])/(6*hi[counter])+(((x_2-x_f1)*arr[1][i-1]+(x_f1-x_1)*arr[1][i])/hi[counter]) -(((x_2-x_f1)*final_result1[counter-1]+(x_f1-x_1)*final_result1[counter])*hi[counter])/6
             break
-
     return s_x
 
 # Press the green button in the gutter to run the script.
+
+
 if __name__ == '__main__':
-    "לא לשכוח להוסיף הערות לבודק על הטבלת ערכים הזו מתחת"
-    two_dimensional_array = tuple([[0, 0.5235987756, 0.7853981634, 1.570796327], [0, 0.5, 0.7072, 1]])
-    x_f = 2.5
-    #another example:
-    #two_dimensional_array = tuple([[1, 2, 4], [1, 0, 1.5]])
-    #x_f = 3
+    # values_table = tuple([[0, 0.5235987756, 0.7853981634, 1.570796327], [0, 0.5, 0.7072, 1]])
+    # x_f = 1.047197551
+    # another example:
+    polynomial = 0
+    values_table = tuple([[1, 2, 4], [1, 0, 1.5]])
+    x_f = 3
     final_result = []
     answer_matrix = []
-    size = len(two_dimensional_array[0])
-    #result = linear_interpolation(two_dimensional_array, x_f)
-    #print(result)
-    #result = Polynomial_interpolation(two_dimensional_array, x_f)
-    #print(result)
-    print(lagrange_interpolation(two_dimensional_array, x_f))
-    size = len(two_dimensional_array[0]) - 2
-    print(Spline_Kobe(two_dimensional_array, x_f))
+    size = len(values_table[0])
+    result = linear_interpolation(values_table, x_f)
+    print(result)
+    result = Polynomial_interpolation(values_table, x_f)
+    print(result)
+    print(lagrange_interpolation(values_table, x_f))
+    print(Neville(0, len(values_table[0])-1, polynomial))
+    size = len(values_table[0]) - 2
+    print(Spline_Kobe(values_table, x_f))
+
 
 
 
